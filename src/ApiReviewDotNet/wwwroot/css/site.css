@@ -252,6 +252,10 @@ app {
         margin-left: 0;
     }
 
+    .calendar-nav div {
+        flex: 1;
+    }
+
     .calendar-nav h3 {
         flex-grow: 1;
         text-align: center;

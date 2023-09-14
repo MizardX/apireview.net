@@ -3,10 +3,13 @@
 @if (CurrentDate is not null)
 {
     <div class="calendar-nav">
+        <div>
         <button class="btn btn-secondary btn-sm" @onclick="PreviousMonthAsync"><span class="oi oi-arrow-left"></span></button>
         <button class="btn btn-secondary btn-sm" @onclick="TodayAsync">Today</button>
         <button class="btn btn-secondary btn-sm" @onclick="NextMonthAsync"><span class="oi oi-arrow-right"></span></button>
+        </div>
         <h3>@CurrentDate.Value.ToString("MMMM yyyy")</h3>
+        <div class="d-none d-md-block"></div>
     </div>
 }
 
