@@ -4,50 +4,58 @@
 {
     <div class="calendar-nav">
         <div>
-        <button class="btn btn-secondary btn-sm" @onclick="PreviousMonthAsync"><span class="oi oi-arrow-left"></span></button>
-        <button class="btn btn-secondary btn-sm" @onclick="TodayAsync">Today</button>
-        <button class="btn btn-secondary btn-sm" @onclick="NextMonthAsync"><span class="oi oi-arrow-right"></span></button>
+            <button class="btn btn-secondary btn-sm" @onclick="PreviousMonthAsync"><span class="oi oi-arrow-left"></span></button>
+            <button class="btn btn-secondary btn-sm" @onclick="TodayAsync">Today</button>
+            <button class="btn btn-secondary btn-sm" @onclick="NextMonthAsync"><span class="oi oi-arrow-right"></span></button>
         </div>
         <h3>@CurrentDate.Value.ToString("MMMM yyyy")</h3>
         <div class="d-none d-md-block"></div>
     </div>
 }
 
-@if (Cells is not null)
+@if (Cells is not { Length: > 0 })
 {
-<div class="calendar">
-    <div class="calendar-cell calendar-header">Sunday</div>
-    <div class="calendar-cell calendar-header">Monday</div>
-    <div class="calendar-cell calendar-header">Tuesday</div>
-    <div class="calendar-cell calendar-header">Wednesday</div>
-    <div class="calendar-cell calendar-header">Thursday</div>
-    <div class="calendar-cell calendar-header">Friday</div>
-    <div class="calendar-cell calendar-header">Saturday</div>
-    @foreach (var cell in Cells)
-    {
-        var isFirstCell = cell == Cells.First();
-        var includeMonth = isFirstCell || cell.DateTime.Day == 1;
-        var pastClass = cell.DateTime < Today ? "past" : "";
-        var todayClass = cell.DateTime == Today ? "today" : "";
-        var dayText = includeMonth
-                ? @cell.DateTime.ToString("MMM d")
-                : @cell.DateTime.Day.ToString();
-
-        <div class="calendar-cell @pastClass @todayClass">
-            <div class="calendar-day">@dayText</div>
-
-            @if (cell.Entries.Any())
-            {
-                <ul class="list-unstyled">
-                    @foreach (var entry in cell.Entries)
-                    {
-                        <li><span class="time">@entry.Start.ToString("t")</span> @entry.Title</li>
-                    }
-                </ul>
-            }
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border m-3" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
-    }
-</div>
+    </div>
+}
+else
+{
+    <div class="calendar">
+        <div class="calendar-cell calendar-header">Sunday</div>
+        <div class="calendar-cell calendar-header">Monday</div>
+        <div class="calendar-cell calendar-header">Tuesday</div>
+        <div class="calendar-cell calendar-header">Wednesday</div>
+        <div class="calendar-cell calendar-header">Thursday</div>
+        <div class="calendar-cell calendar-header">Friday</div>
+        <div class="calendar-cell calendar-header">Saturday</div>
+        @foreach (var cell in Cells)
+        {
+            var isFirstCell = cell == Cells.First();
+            var includeMonth = isFirstCell || cell.DateTime.Day == 1;
+            var pastClass = cell.DateTime < Today ? "past" : "";
+            var todayClass = cell.DateTime == Today ? "today" : "";
+            var dayText = includeMonth
+            ? @cell.DateTime.ToString("MMM d")
+            : @cell.DateTime.Day.ToString();
+
+            <div class="calendar-cell @pastClass @todayClass">
+                <div class="calendar-day">@dayText</div>
+
+                @if (cell.Entries.Any())
+                {
+                    <ul class="list-unstyled">
+                        @foreach (var entry in cell.Entries)
+                        {
+                            <li><span class="time">@entry.Start.ToString("t")</span> @entry.Title</li>
+                        }
+                    </ul>
+                }
+            </div>
+        }
+    </div>
 }
 
 <p class="mt-3 text-muted">
